@@ -10,9 +10,6 @@ class UpDownGame :
         NONE, CLEAR, OVER
     };
 
-    const int MIN_RANGE = 10;
-    const int MAX_RANGE = 100;
-    const int MAX_ATTEMP_NUM = 10;
 private:
     bool Game(int stage);
     int GetRandomRange(const int&, const int&);

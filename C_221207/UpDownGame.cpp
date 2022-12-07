@@ -8,9 +8,10 @@
 void UpDownGame::Run()
 { 
 	srand((unsigned int)time(NULL));
-	for(int i = 1; i <= 5; i++)
+	for (int i = 1; i <= 5; i++) {
 		if (!Game(i))
 			break;
+	}
 }
 
 bool UpDownGame::Game(int stage)
@@ -20,6 +21,8 @@ bool UpDownGame::Game(int stage)
 	const int MAX_ATTEMP_NUM = 10 - stage;
 
 	printf("Up&DownGame Start!\n");
+
+	printf("");
 
 	int randomNum = GetRandomRange(MIN_RANGE, MAX_RANGE);
 #ifdef TEST
