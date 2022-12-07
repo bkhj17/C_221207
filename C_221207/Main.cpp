@@ -1,9 +1,10 @@
-//#include "RockPaperScissors.h"
-//#include "Loop.h"
-#include "Homework.h"
+//main.cpp
+#include "UpDownGame.h"
+#include "Function.h"
+//#include "Homework.h"
 
 int main() {
-	Homework r;
+	UpDownGame r;
 	r.Run();
 	return 0;
 }
