@@ -4,7 +4,7 @@
 #include <time.h>
 
 #ifndef TEST
-#define TEST
+//#define TEST
 #endif // !TEST
 
 const uint MIN_NUM = 1;
@@ -185,7 +185,7 @@ void Homework::Run()
 			break;
 		default:
 			printf("게임을 종료합니다.");
-			break;
+			return;
 		}
 		printf("\n");
 	} while (true);
