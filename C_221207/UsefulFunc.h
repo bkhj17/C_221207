@@ -1,5 +1,5 @@
 #pragma once
-typedef unsigned uint;
+#include "UsefulType.h"
 
 template <typename T>
 T Min(const T&, const T&);
@@ -15,3 +15,4 @@ void Swap(T* a, T* b);
 
 uint MakeRandByRange(uint a, uint b);
 void Shuffle(uint* arr, const uint& arr_length, const uint& n_shuffle);
+void GetRandomsNoOverlap(uint* arr, const uint& arr_length, const uint& num);

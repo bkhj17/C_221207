@@ -134,7 +134,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Pointer.cpp" />
     <ClCompile Include="UpDownGame.cpp" />
-    <ClCompile Include="Useful.cpp" />
+    <ClCompile Include="UsefulFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
@@ -144,7 +144,8 @@
     <ClInclude Include="Homework.h" />
     <ClInclude Include="Pointer.h" />
     <ClInclude Include="UpDownGame.h" />
-    <ClInclude Include="Useful.h" />
+    <ClInclude Include="UsefulFunc.h" />
+    <ClInclude Include="UsefulType.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

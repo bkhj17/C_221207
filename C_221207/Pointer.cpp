@@ -1,5 +1,5 @@
 #include "Pointer.h"
-#include "Useful.h"
+#include "UsefulFunc.h"
 #include <stdio.h>
 
 int Pointer::TestPtr()

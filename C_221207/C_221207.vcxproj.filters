@@ -36,7 +36,7 @@
     <ClCompile Include="Pointer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Useful.cpp">
+    <ClCompile Include="UsefulFunc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,10 @@
     <ClInclude Include="Pointer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Useful.h">
+    <ClInclude Include="UsefulFunc.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UsefulType.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

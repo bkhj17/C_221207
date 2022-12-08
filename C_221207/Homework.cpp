@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "UsefulFunc.h"
 
 #ifndef TEST
 //#define TEST
@@ -9,8 +10,8 @@
 
 const uint MIN_NUM = 1;
 const uint MAX_NUM = 9;
-const uint GAME_OVER = 3;
-const uint SHUFFLE_TIME = 100;
+const uint GAME_OVER = 10;
+const uint SHUFFLE_TIME = 1000;
 const uint ARR_SIZE = 3;
 
 void Homework::MakeRandSet(uint* arr, uint arr_length, bool overlap)
@@ -18,7 +19,9 @@ void Homework::MakeRandSet(uint* arr, uint arr_length, bool overlap)
 	if (!overlap) {
 		uint numbers[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		//셔플
-		Shuffle(numbers, MAX_NUM, SHUFFLE_TIME);
+		Shuffle(numbers, 9, SHUFFLE_TIME);
+		//
+		GetRandomsNoOverlap(numbers, sizeof(numbers) / sizeof(uint), ARR_SIZE);
 
 		for (uint i = 0; i < arr_length; i++)
 			arr[i] = numbers[i];
@@ -31,31 +34,56 @@ void Homework::MakeRandSet(uint* arr, uint arr_length, bool overlap)
 	}
 }
 
+bool Homework::CheckInvalid(uint* arr, uint arr_length)
+{
+	for (uint i = 0; i < arr_length; i++) {
+		if (arr[i] < MIN_NUM || arr[i] > MAX_NUM)
+			return true;
+	}
+
+	return false;
+}
+
+bool Homework::CheckOverlap(uint* arr, uint arr_length)
+{
+	bool did[MAX_NUM] = { false };
+
+	for (uint i = 0; i < arr_length; i++) {
+		if (did[arr[i]-1])
+			return true;	//중복 존재
+		did[arr[i]-1] = true;
+	}
+	return false;
+}
+
+
 void Homework::GetInputSet(uint* arr, uint arr_length, bool overlap)
 {
-	bool did[9] = { false };
 	for (int i = 0; i < arr_length; i++)
 		arr[i] = 0;
-		
-	printf("%d개의 숫자를 입력하시오(%d~%d)", ARR_SIZE, MIN_NUM, MAX_NUM);
-	printf((overlap ? "(중복 가능)\n" : "(중복 없음)\n"));
-	for (int i = 0; i < arr_length; i++) {
-		printf("\n%d번째 숫자를 입력하시오 -> ", i+1);
-		scanf_s("%d", arr+i);
 
-		if (!isValid(arr[i])) {
-			printf("그 숫자는 범위 밖입니다. 다시 입력하시오\n");
-			i--;
+	while (1) {
+		printf("%d개의 숫자를 입력하시오(%d~%d)", ARR_SIZE, MIN_NUM, MAX_NUM);
+		printf((overlap ? "(중복 가능)\n" : "(중복 없음)\n"));
+		printf("-> ");
+		for (int i = 0; i < arr_length; i++)
+			scanf_s("%d", arr + i);
+		
+
+		if (CheckInvalid(arr, arr_length)) {
+			printf("범위 밖의 숫자가 있습니다. 다시 입력하시오\n");
 			continue;
 		}
-		else if (!overlap && did[arr[i]]) {
-			printf("이전에 입력한 숫자와 중복됩니다. 다시 입력하시오\n");
-			arr[i] = 0;
-			i--;
+
+		if (!overlap && CheckOverlap(arr, arr_length)) {
+			printf("중복된 숫자가 있습니다. 다시 입력하시오\n");
 			continue;
 		}
-		did[arr[i]] = true;
+
+		break;
 	}
+
+
 	printf("입력한 숫자 : ");
 	PrintArr(arr, arr_length);
 	printf("\n");
@@ -70,7 +98,7 @@ void Homework::PrintArr(uint* arr, uint arr_length)
 
 void Homework::CompareArr(int& strike, int& ball, const uint* arr_target, const uint* arr_input)
 {
-	bool isIn[9] = {};
+	bool isIn[9] = {false};
 
 	strike = 0;
 	ball = 0;
@@ -96,22 +124,22 @@ bool Homework::isValid(uint a)
 	return a >= MIN_NUM && a <= MAX_NUM;
 }
 
-bool Homework::PrintAttackResult(const int& strike, const int& ball, int &out)
+bool Homework::PrintAttackResult(const int& strike, const int& ball)
 {
 	if (strike == 3) {
 		printf("3 스트라이크!\n");
 		return true;
 	}
-	else if (IsOut(strike, ball)) {
-		printf("%d아웃!\n", ++out);
-	}
+
+	if (IsOut(strike, ball))
+		printf("아웃!");
 	else {
 		if (strike > 0)
-			printf("%d 스트라이크", strike);
+			printf("%d 스트라이크 ", strike);
 		if (ball > 0)
 			printf("%d 볼", ball);
-		printf("\n");
 	}
+	printf("\n");
 	return false;
 }
 
@@ -119,7 +147,7 @@ void Homework::PrintGameResult(int out)
 {
 	if (out == GAME_OVER)
 		//패배
-		printf("3 아웃. 게임 오버....\n");
+		printf("게임 오버....\n");
 	
 	else
 		//승리
@@ -137,12 +165,9 @@ int Homework::Title()
 	return s;
 }
 
-void Homework::Game(bool overlap)
+void Homework::Game(int chance, bool overlap)
 {
 	uint arr_rand[3] = {}, arr_input[3] = {};
-	int out = 0;
-
-	srand((uint)time(NULL));
 	MakeRandSet(arr_rand, ARR_SIZE, overlap);
 #ifdef TEST
 	printf("Test : ");
@@ -152,16 +177,18 @@ void Homework::Game(bool overlap)
 	printf("[게임 시작]\n");
 
 	int strike = 0, ball = 0;
-	while (out != GAME_OVER) {
+	int cntAnswer = 0;
+	while (cntAnswer != GAME_OVER) {
+		printf("남은 기회 : %d번\n", GAME_OVER - cntAnswer);
 		GetInputSet(arr_input, ARR_SIZE, overlap);
-
+		printf("%d차 시도 : ", ++cntAnswer);
 		PrintArr(arr_input, ARR_SIZE);
-		printf(" : ");
+		printf(" => ");
 		CompareArr(strike, ball, arr_rand, arr_input);
-		if (PrintAttackResult(strike, ball, out))
+		if (PrintAttackResult(strike, ball))
 			break;
 	}
-	PrintGameResult(out);
+	PrintGameResult(cntAnswer);
 }
 
 void Homework::Run()
@@ -174,6 +201,7 @@ void Homework::Run()
 		비교 => 자릿수==숫자 => 스트라이크, 숫자는 있고 자리는 다르면 볼, 0s0b는 아웃
 		3아웃은 게임오버
 	*/
+	srand((uint)time(NULL));
 	do {
 		int select = Title();
 		switch (select) {
